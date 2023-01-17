@@ -18,4 +18,18 @@ describe("test singleton", () => {
   it("should singleton", () => {
     expect(clientCode()).toBeTruthy();
   });
+  it("should singleton code", () => {
+    const singleton = Singleton.getInstance();
+    expect(singleton.age).toBeTypeOf("number");
+    expect(singleton.age).toBe(10);
+    singleton.setName("singleton");
+    const name = singleton.getName();
+    expect(name === "singleton").toBeTruthy();
+  });
+  it("Tests for the same instance", () => {
+    const singleton = Singleton.getInstance();
+    const singleton1 = Singleton.getInstance();
+    const res = singleton.getName() === singleton1.getName();
+    expect(res).toBeTruthy();
+  });
 });
