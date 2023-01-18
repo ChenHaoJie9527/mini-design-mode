@@ -9,6 +9,9 @@ interface Builder {
   producePartA(): void;
   producePartB(): void;
   producePartC(): void;
+  producePartD(name: string): void;
+  producePartE(color: string): void;
+  producePartF(price: number): void;
 }
 
 /**
@@ -40,6 +43,15 @@ export class ConcreteBuilder implements Builder {
   producePartC(): void {
     this.product?.parts.push("partC1");
   }
+  producePartD(name: string) {
+    this.product!.name = name;
+  }
+  producePartE(color: string) {
+    this.product!.color = color;
+  }
+  producePartF(price: number) {
+    this.product!.price = price;
+  }
   /**
    * 构建器应该提供他们自己的方法 检索结果。这是因为不同类型的构建器可能会创建 完全不同的产品，不遵循相同的界面
    * 因此，这些方法不能在基本Builder接口中声明
@@ -65,6 +77,9 @@ class Product1 {
     console.log(`Product parts: ${this.parts.join(", ")}\n`);
     return this.parts.length;
   }
+  price: number = 0;
+  color: string = "white";
+  name: string = "code_01";
 }
 
 /**
@@ -91,6 +106,26 @@ class Director {
     this.builder?.producePartB();
     this.builder?.producePartC();
   }
+  /**
+   * 这是一款颜色为红色，价格为10，名称为code2的产品
+   */
+  builderProductPrice() {
+    this.builder?.producePartD("code02");
+    this.builder?.producePartE("red");
+    this.builder?.producePartF(10);
+  }
+  /**
+   * 这是一款颜色为黑色 价格为20 名称为code3的产品
+   */
+  builderProductColor() {
+    this.builder?.producePartD("code3");
+    this.builder?.producePartE("black");
+    this.builder?.producePartF(20);
+  }
+  /**
+   * 这是一款颜色为蓝色 价格为30 名称为code4的产品
+   */
+  builderProductName() {}
 }
 
 /**
