@@ -2,8 +2,14 @@ interface Builder {
   reset(): void;
   setSeats(val: number): void;
   setEngine(engine: any): void;
-  setTripComputer(): void;
-  setGPS(): void;
+  setTripComputer(val: number): void;
+  setGPS(val: string): void;
+}
+
+interface ManualCar {
+  setPriceText(): void;
+  setColor(): void;
+  setNameText(): void;
 }
 
 /**
@@ -42,10 +48,12 @@ class CarBuilder implements Builder {
   /**
    * 安装全球定位系统。
    */
-  setGPS(): void {
-    this
+  setGPS(val: string): void {
+    this.car!.gps = val;
   }
-  setTripComputer(): void {}
+  setTripComputer(val: number): void {
+    this.car!.computer = val + "";
+  }
 
   // 具体生成器需要自行提供获取结果的方法。这是因为不同类型的生成器可能
   // 会创建不遵循相同接口的、完全不同的产品。所以也就无法在生成器接口中
@@ -65,7 +73,7 @@ class CarBuilder implements Builder {
 /**
  * 汽车使用手册生成器
  */
-class CarManualBuilder implements Builder {
+class CarManualBuilder implements ManualCar {
   private manual: CarManual | null = null;
   constructor() {
     this.reset();
@@ -77,9 +85,18 @@ class CarManualBuilder implements Builder {
     this.manual = new CarManual();
   }
   setEngine(engine: any): void {}
-  setGPS(): void {}
+  setGPS(val: string): void {}
   setSeats(val: number): void {}
-  setTripComputer(): void {}
+  setTripComputer(val: number): void {}
+  setPriceText() {
+    this.manual!.priceText = "$110";
+  }
+  setColor() {
+    this.manual!.color = "red";
+  }
+  setNameText() {
+    this.manual!.nameText = "hello";
+  }
   getResult(): CarManual {
     const result = this.manual!;
     this.reset();
@@ -91,7 +108,7 @@ class Car {
   seats: number = 0;
   engine: string = "";
   gps: string = "";
-  computer: string = ''
+  computer: string = "";
 }
 
 class CarManual {
@@ -109,20 +126,34 @@ class CarManual {
  */
 class Director {
   makeSUV() {}
-  makeSportCar(builder: Builder) {
-    builder.reset();
-    builder.setSeats(2);
+  makeSportCar(builder: ManualCar) {
+    builder.setColor();
+    builder.setNameText();
+    builder.setPriceText();
   }
   constructSportsCar(builder: Builder) {
-    builder
+    builder.setEngine("v12");
+    builder.setGPS("v10");
+    builder.setSeats(10);
+    builder.setTripComputer(110);
   }
   constructSUV(builder: Builder) {}
 }
 
 function application() {
-    const director = new Director();
-    const carBuilder = new CarBuilder();
-    director.constructSportsCar(carBuilder);
+  const director = new Director();
+  const carBuilder = new CarBuilder();
+  director.constructSportsCar(carBuilder);
+  const result = carBuilder.getResult();
+  return result;
 }
 
-export {};
+function getMakeSportCar() {
+  const director = new Director();
+  const carManual = new CarManualBuilder();
+  director.makeSportCar(carManual);
+  const result = carManual.getResult();
+  return result;
+}
+
+export { application, getMakeSportCar };
