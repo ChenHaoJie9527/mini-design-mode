@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { clintCodeProduct1, ConcreteCreator1 } from "../design/factoryMethod";
+import { clintCodeProduct1, clintCodeProduct2, ConcreteCreator1, ConcreteCreator2 } from "../design/factoryMethod";
 
 describe("test factoryMethods", () => {
   it("test product1", () => {
@@ -7,4 +7,10 @@ describe("test factoryMethods", () => {
     const result = clintCodeProduct1(creator1);
     expect(result).toBe("ConcreteProduct1");
   });
+
+  it("test product2", () => {
+    const creator2 = new ConcreteCreator2();
+    const result = clintCodeProduct2(creator2);
+    expect(result).toBe("hello world");
+  })
 });

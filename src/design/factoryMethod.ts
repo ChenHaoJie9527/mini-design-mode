@@ -3,7 +3,7 @@
  */
 abstract class Creator {
   /**
-   * 创建者也可能提供一些默认的实现工厂方法
+   * 创建者也可能提供一些默认的实现抽象工厂方法
    */
   abstract factoryMethod(): Product;
   /**
@@ -33,12 +33,26 @@ class ConcreteCreator1 extends Creator {
   }
 }
 
+class ConcreteCreator2 extends Creator {
+  factoryMethod(): Product {
+    return new ConcreteProduct2();
+  }
+  someOperation(): string {
+    return "hello world";
+  }
+}
+
 /**
  * Concrete Products提供了Product接口的各种实现
  */
 class ConcreteProduct1 implements Product {
   operation(): string {
     return "ConcreteProduct1";
+  }
+}
+class ConcreteProduct2 implements Product {
+  operation(): string {
+    return "ConcreteProduct2";
   }
 }
 
@@ -49,9 +63,25 @@ interface Product {
   operation(): string;
 }
 
+/**
+ *客户端代码与具体创建者的实例一起工作，尽管通过
+ *其基本接口。只要客户端继续工作与创作者通过
+ *基接口，你可以传递给任何创建者的子类。
+ */
 function clintCodeProduct1(creator: Creator) {
   const result = creator.someOperation();
   return result;
 }
 
-export { clintCodeProduct1, ConcreteCreator1 };
+function clintCodeProduct2(creator: Creator) {
+  const result = creator.someOperation();
+  console.log(result);
+  return result;
+}
+
+export {
+  clintCodeProduct1,
+  ConcreteCreator1,
+  clintCodeProduct2,
+  ConcreteCreator2,
+};
