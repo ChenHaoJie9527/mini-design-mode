@@ -23,20 +23,14 @@ class Adapter extends Target {
     this.adapter = adapter;
   }
   request(): string {
-    const result = this.adapter
-      .specificRequest()
-      .split(".")
-      .reverse()
-      .join(",");
-    return `Adapter：${result}`;
+    const result = this.adapter.specificRequest().split("").reverse().join("");
+    return `Adapter:${result}`;
   }
 }
 
 function clientCode(target: Target) {
   const result = target.request();
-  console.log(result);
+  return result;
 }
 
-
-
-export { clientCode };
+export { clientCode, Target, Adaptee, Adapter };
